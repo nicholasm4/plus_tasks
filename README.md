@@ -54,8 +54,3 @@ Project在计划制定方面表现出色，但它无法实现多人协同办公�
         <td><img src="https://oscimg.oschina.net/oscnet/up-a98f60bd103cc0eca1a67612ab4cb644003.png"/></td>
     </tr>
 </table>
-
-## 优加任务管理系统交流群
-
-
-
