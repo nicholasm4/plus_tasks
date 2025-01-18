@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pms.mapper.ProjectDynamicsMapper">
+
+    <select id="getProjectDynamics"   resultType="com.ruoyi.pms.dto.dynamics.DynamicsListVm">
+        select
+            t1.id,
+            t1.project_id,
+            t1.content,
+            t1.create_time
+        from pms_project_dynamics t1
+        where t1.project_id = #{projectId}
+        order by t1.create_time desc
+        LIMIT 50;
+    </select>
+</mapper>

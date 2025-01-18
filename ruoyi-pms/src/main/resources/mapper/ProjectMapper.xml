@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pms.mapper.ProjectMapper">
+
+    <select id="pageProject" resultType="com.ruoyi.pms.dto.project.ProjectPageVm">
+        select
+        t1.id,t1.project_name,t1.description,t1.project_status,t1.user_id,
+        t2.nick_name AS userName,t5.progress,
+        count(DISTINCT t3.id) as taskCount,
+        t5.start_date,
+        t5.end_date,
+        GROUP_CONCAT(DISTINCT t4.user_id) AS projectManagers
+        from pms_project t1
+        left join sys_user t2 on t1.user_id = t2.user_id
+        left join pms_project_task t3 on t1.id =t3.project_id
+        left join pms_project_resources t4 on t1.id = t4.project_id
+        left join pms_project_progress t5 on t1.id = t5.id
+        where 1=1
+        <if test="query.projectName != null and query.projectName != ''">
+            and t1.project_name like concat('%', #{query.projectName}, '%')
+        </if>
+
+        <if test="query.projectStatus != null and query.projectStatus != ''">
+            and t1.project_status = #{query.projectStatus}
+        </if>
+
+        <if test='query.type =="1"'>
+            and ((t1.project_status ='1' and t1.is_visibility ='1') or (t4.user_id = #{userId} or t1.user_id = #{userId}))
+            and t1.is_deleted ='0'
+            and t1.is_archived ='0'
+        </if>
+        <if test='query.type =="2"'>
+
+            and (t4.user_id = #{userId} or t1.user_id = #{userId})
+            and t1.is_deleted ='0'
+            and t1.is_archived ='0'
+        </if>
+        <if test='query.type =="3"'>
+            and ((t1.project_status ='1' and t1.is_visibility ='1') or (t4.user_id = #{userId} or t1.user_id = #{userId}))
+            and t1.is_archived ='1'
+            and t1.is_deleted ='0'
+        </if>
+        <if test='query.type =="4"'>
+            and ((t1.project_status ='1' and t1.is_visibility ='1') or (t4.user_id = #{userId} or t1.user_id = #{userId}))
+            and t1.is_deleted ='1'
+        </if>
+        group by t1.id,t1.project_name,t1.description,t1.project_status,t1.user_id, t2.nick_name ,t5.progress, t5.start_date, t5.end_date
+
+
+    </select>
+
+
+    <select id="detailProject"   resultType="com.ruoyi.pms.dto.project.ProjectDetailVm">
+        select t1.id
+             , t1.project_name
+             , t1.description
+             , t1.user_id
+             , t1.project_status
+             , t1.is_visibility
+             , t1.is_archived
+             , t1.is_deleted
+             , t2.nick_name                        as userName
+             , t5.start_date
+             , t5.end_date
+             ,t5.progress
+             ,t5.duration
+             , GROUP_CONCAT(DISTINCT t6.nick_name) AS projectManagers
+        from pms_project t1
+                 left join sys_user t2 on t1.user_id = t2.user_id
+                 left join pms_project_resources t4 on t1.id = t4.project_id
+                 left join pms_project_progress t5 on t1.id = t5.id
+                 left join sys_user t6 on t4.user_id = t6.user_id
+        where t1.id = #{id}
+        group by t1.id, t1.project_name, t1.description, t1.user_id, t1.project_status, t1.is_visibility, t1.is_deleted,
+                 t1.is_archived, t2.nick_name
+    </select>
+
+    <select id="getProjectMembers"   resultType="java.lang.String">
+select ll.name
+from (select GROUP_CONCAT(DISTINCT t2.nick_name) name
+from pms_project_task t1
+join sys_user t2 on t1.assign_user_id = t2.user_id
+where t1.project_id = #{projectId}
+union all
+select GROUP_CONCAT(DISTINCT t2.nick_name) name
+from pms_project_resources t1
+join sys_user t2 on t1.user_id = t2.user_id
+where t1.project_id = #{projectId}) ll
+where ll.name is not null
+    </select>
+
+    <select id="countProject"   resultType="java.lang.Long">
+        select
+        count(DISTINCT t1.id)
+        from pms_project t1
+        left join pms_project_resources t2 on t1.id = t2.project_id
+        where t2.user_id = #{userId}
+        and t1.project_status = '1'
+        <if test='type =="1"'>
+
+        </if>
+        <if test='type =="2"'>
+         and   t1.is_archived ='1'
+        </if>
+        <if test='type =="3"'>
+            and   t1.is_archived !='1'
+        </if>
+
+    </select>
+
+</mapper>

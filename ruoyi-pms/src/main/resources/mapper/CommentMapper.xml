@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pms.mapper.CommentMapper">
+    <select id="listComment"   resultType="com.ruoyi.pms.dto.comment.CommentListVm">
+        select
+            t1.id,
+            t1.user_id,
+            t1.content,
+            t1.create_time,
+            t1.module_id,
+            t2.nick_name as userName
+        from pms_comment t1
+        left join sys_user t2 on t1.user_id = t2.user_id
+        where t1.module_id = #{moduleId}
+        order by t1.create_time
+    </select>
+
+</mapper>
