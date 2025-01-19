@@ -18,8 +18,39 @@ public class ProjectPageDm {
     @Schema(description = "结束时间")
     private String endDate;
 
-    @Schema(description = "请求类型")
+    @Schema(description = "sql条件查询时需要用到的类型做判断")
     private String type;
+
+    @Schema(description = "任务名称")
+    private String taskName;
+    @Schema(description = "任务状态")
+    private String taskStatus;
+    @Schema(description = "项目ID")
+    private String projectId;
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    public void setTaskStatus(String taskStatus) {
+        this.taskStatus = taskStatus;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public String getTaskStatus() {
+        return taskStatus;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
 
     public Integer getPageSize() {
         return pageSize;
@@ -75,5 +106,21 @@ public class ProjectPageDm {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "ProjectPageDm{" +
+                "pageSize=" + pageSize +
+                ", pageNum=" + pageNum +
+                ", projectName='" + projectName + '\'' +
+                ", projectStatus='" + projectStatus + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", type='" + type + '\'' +
+                ", taskName='" + taskName + '\'' +
+                ", taskStatus='" + taskStatus + '\'' +
+                ", projectId='" + projectId + '\'' +
+                '}';
     }
 }

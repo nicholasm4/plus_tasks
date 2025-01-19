@@ -367,6 +367,7 @@ export default {
       default: ''
     }
   },
+  // 初始化data对象，包括表格配置、查询参数、规则验证等。
   data() {
     return {
       selectNum: 0,
@@ -501,11 +502,12 @@ export default {
       }
     };
   },
+  // 在实例创建完成后立即获取用户列表和任务列表。
   created() {
     //获取我是从那个路由进入
 
-
   },
+  // 页面加载完成后初始化可拖拽行。
   mounted() {
     this.load();
   },

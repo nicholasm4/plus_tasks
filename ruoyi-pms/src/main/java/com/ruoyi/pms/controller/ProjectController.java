@@ -25,7 +25,13 @@ public class ProjectController {
     @GetMapping("/page")
     @ResponseBody
     public ResponseResult<ResponsePaged<ProjectPageVm>> page(@ModelAttribute ProjectPageDm dm) {
-        ResponsePaged<ProjectPageVm>  data =   projectService.page(dm);
+//        dm.setType("5");
+        if(dm.getType() == null){
+            dm.setType("1");
+        }
+        System.out.println("传入后端的参数为(ProjectPageDm)：" + dm);
+        ResponsePaged<ProjectPageVm>  data = projectService.page(dm);
+        System.out.println("准备响应给前端的数据为(ResponsePaged<ProjectPageVm>)：" + data);
         return ResponseResult.success(data);
     }
 
@@ -35,6 +41,7 @@ public class ProjectController {
     @ResponseBody
     public ResponseResult<WorkStationCountVm> getWorkStationCount() {
         WorkStationCountVm  data =  projectService.getWorkStationCount();
+        System.out.println("准备响应给前端的数据为(WorkStationCountVm)：" + data);
         return ResponseResult.success(data);
     }
 

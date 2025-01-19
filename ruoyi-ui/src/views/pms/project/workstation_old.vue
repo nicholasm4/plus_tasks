@@ -7,38 +7,38 @@
           <el-row>
             <el-col :span="24">
               <el-col :span="4">
-                <div class="grid-content grid-content-1" @click="filterProjects('1')">
+                <div class="grid-content grid-content-1" @click="filterProjects('participated')">
                   <div class="top-half">{{ countInfo.projectsParticipated }}</div>
-                  <div class="bottom-half">所有项目</div>
+                  <div class="bottom-half">参与项目数</div>
                 </div>
               </el-col>
               <el-col :span="4">
-                <div class="grid-content grid-content-1" @click="filterProjects('2')">
+                <div class="grid-content grid-content-1" @click="filterProjects('completed')">
                   <div class="top-half">{{ countInfo.projectsCompleted }}</div>
-                  <div class="bottom-half">已完成项目</div>
+                  <div class="bottom-half">完成项目数</div>
                 </div>
               </el-col>
               <el-col :span="4">
-                <div class="grid-content grid-content-1" @click="filterProjects('3')">
+                <div class="grid-content grid-content-1" @click="filterProjects('pending')">
                   <div class="top-half">{{ countInfo.projectsPending }}</div>
-                  <div class="bottom-half">待完成项目</div>
+                  <div class="bottom-half">待办项目数</div>
                 </div>
               </el-col>
 
               <el-col :span="4">
-                <div class="grid-content grid-content-1" @click="filterTasks('4')">
+                <div class="grid-content grid-content-1" @click="filterTasks('completed')">
                   <div class="top-half">{{ countInfo.tasksCompleted }}</div>
                   <div class="bottom-half">完成任务数量</div>
                 </div>
               </el-col>
               <el-col :span="4">
-                <div class="grid-content grid-content-1" @click="filterTasks('5')">
+                <div class="grid-content grid-content-1" @click="filterTasks('pending')">
                   <div class="top-half">{{ countInfo.tasksPending }}</div>
                   <div class="bottom-half">待办任务数量</div>
                 </div>
               </el-col>
               <el-col :span="4">
-                <div class="grid-content grid-content-1" @click="filterTasks('6')">
+                <div class="grid-content grid-content-1" @click="filterTasks('overdue')">
                   <div class="top-half">{{ countInfo.tasksOverdue }}</div>
                   <div class="bottom-half">逾期任务数量</div>
                 </div>
@@ -69,13 +69,13 @@
                         <span>项目列表</span>
                       </div>
                     </template>
-                    <!-- <template slot-scope="scope">-->
-                    <!--  <div>-->
-                    <!--    <span class="project-name">{{ scope.row.projectName }}</span>-->
-                    <!--     <br/>-->
-                    <!--     <span class="project-desc">{{ scope.row.description }}</span>-->
-                    <!--   </div>-->
-                    <!-- </template>-->
+                      <!-- <template slot-scope="scope">-->
+                      <!--  <div>-->
+                      <!--    <span class="project-name">{{ scope.row.projectName }}</span>-->
+                      <!--     <br/>-->
+                      <!--     <span class="project-desc">{{ scope.row.description }}</span>-->
+                      <!--   </div>-->
+                      <!-- </template>-->
                     <template slot-scope="scope">
                       <div>
                         <span class="project-name" style="font-size: medium;color: #606266">{{scope.row.projectName}}</span>
@@ -156,18 +156,18 @@
                   <el-table-column
                     prop="taskName"
                     label="任务列表">
-                    <!--                    <template slot="header" slot-scope="scope">-->
-                    <!--                      <el-row>-->
-                    <!--                        <el-col :span="24">-->
-                    <!--                          <el-radio-group v-model="tabPosition" @input="handleTaskListTabPositionChange">-->
-                    <!--                            <el-radio-button label="待办">待办</el-radio-button>-->
-                    <!--                            <el-radio-button label="我的">我的</el-radio-button>-->
-                    <!--                            <el-radio-button label="协助">协助</el-radio-button>-->
-                    <!--                            <el-radio-button label="全部">全部</el-radio-button>-->
-                    <!--                          </el-radio-group>-->
-                    <!--                        </el-col>-->
-                    <!--                      </el-row>-->
-                    <!--                    </template>-->
+<!--                    <template slot="header" slot-scope="scope">-->
+<!--                      <el-row>-->
+<!--                        <el-col :span="24">-->
+<!--                          <el-radio-group v-model="tabPosition" @input="handleTaskListTabPositionChange">-->
+<!--                            <el-radio-button label="待办">待办</el-radio-button>-->
+<!--                            <el-radio-button label="我的">我的</el-radio-button>-->
+<!--                            <el-radio-button label="协助">协助</el-radio-button>-->
+<!--                            <el-radio-button label="全部">全部</el-radio-button>-->
+<!--                          </el-radio-group>-->
+<!--                        </el-col>-->
+<!--                      </el-row>-->
+<!--                    </template>-->
                     <template slot-scope="scope" style="display: inline">
                       <el-tooltip class="item" effect="dark" placement="right">
                         <div slot="content">
@@ -492,13 +492,10 @@ export default {
       //queryParams 用于存储分页和过滤参数。当用户点击分页按钮或过滤条件发生变化时，
       // queryParams 会更新。然后，这些参数将被传递给 listTask 函数以获取新的任务列表。
       queryParams: { // 查询参数
-        pageNum: 1, // 当前页码
-        pageSize: 10, // 每页条数
-        taskName: undefined, // 任务名称
-        projectId: undefined, // 项目 ID
-        projectStatus: undefined, // 项目状态（0：草稿，1：发布）
-        taskStatus: undefined, // 任务状态  0:待 1：确定 3：完成
-        type: undefined,
+        pageNum: 1,
+        pageSize: 10,
+        taskName: undefined,
+        projectId: undefined
       },
       // pickerOptions 用于配置日期选择器的快捷选项。这些选项允许用户快速选择日期范围，
       // 例如今天、昨天、一周前等。当用户选择一个日期范围时，
@@ -585,34 +582,27 @@ export default {
         }, delay);
       };
     },
-
     //filterProjects & filterTasks: 根据提供的状态参数更新查询参数，
     // 并重新获取项目或任务列表。
     filterProjects(status) {
-      this.queryParams.projectStatus = undefined;
+      this.queryParams.projectStatus = status;
       this.queryParams.taskStatus = undefined; // 清除任务状态过滤
-      this.queryParams.type = status; // 设置请求类型;
       this.getProjectList();
     },
+
     filterTasks(status) {
-      this.queryParams.taskStatus = undefined;
+      this.queryParams.taskStatus = status;
       this.queryParams.projectStatus = undefined; // 清除项目状态过滤
-      this.queryParams.type = status; // 设置请求类型;
       this.getProjectList();
     },
-
-
     //getProjectList: 获取项目列表，根据查询参数筛选并展示到页面上
     getProjectList() {
       this.loading = true;
       let queryParams = {
         pageNum: 1,
         pageSize: 1000,
-        taskName: this.queryParams.taskName,
-        projectId: this.queryParams.projectId,
         projectStatus: this.queryParams.projectStatus,
-        taskStatus: this.queryParams.taskStatus,
-        type: this.queryParams.type // 设置请求类型;
+        taskStatus: this.queryParams.taskStatus
       };
       listProject(queryParams).then(response => {
         this.projectList = response.data.rows;

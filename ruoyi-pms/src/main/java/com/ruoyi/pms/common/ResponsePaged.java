@@ -5,6 +5,9 @@ package com.ruoyi.pms.common;
 import java.util.List;
 
 
+/**
+ * @author nicholasm4
+ */
 public class ResponsePaged<T> {
     public ResponsePaged() {
 
@@ -52,5 +55,14 @@ public class ResponsePaged<T> {
 
     public void setRows(List<T> rows) {
         this.rows = rows;
+    }
+
+    @Override
+    public String toString() {
+        return "ResponsePaged{" +
+                "total=" + total +
+                ", pageCount=" + pageCount +
+                ", rows=" + rows +
+                '}';
     }
 }

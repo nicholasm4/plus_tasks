@@ -2,17 +2,18 @@ package com.ruoyi.pms.dto.project;
 
 public class WorkStationCountVm {
 
-  //参与的项目
+    //参加过的所有项目
     private Long projectsParticipated;
-    //完成的项目
+    //已完成的项目数量
     private Long projectsCompleted;
-    //待完成项目
+    //未完成的项目数量
     private Long projectsPending;
-    //完成的任务
+
+    //已经完成的项目任务
     private Long tasksCompleted;
-    //待完成任务
+    //待办项目任务
     private Long tasksPending;
-    //逾期任务
+    //逾期项目任务
     private Long tasksOverdue;
 
 
@@ -63,4 +64,16 @@ public class WorkStationCountVm {
   public void setTasksOverdue(Long tasksOverdue) {
     this.tasksOverdue = tasksOverdue;
   }
+
+  @Override
+  public String toString() {
+      return "WorkStationCountVm{" +
+              "projectsParticipated=" + projectsParticipated +
+              ", projectsCompleted=" + projectsCompleted +
+              ", projectsPending=" + projectsPending +
+              ", tasksCompleted=" + tasksCompleted +
+              ", tasksPending=" + tasksPending +
+              ", tasksOverdue=" + tasksOverdue +
+              '}';
+    }
 }

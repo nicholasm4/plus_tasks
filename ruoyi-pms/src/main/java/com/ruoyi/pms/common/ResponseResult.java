@@ -44,4 +44,12 @@ public class ResponseResult<T> {
         return responseResult;
     }
 
+    @Override
+    public String toString() {
+        return "ResponseResult{" +
+                "code=" + code +
+                ", message='" + message + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }

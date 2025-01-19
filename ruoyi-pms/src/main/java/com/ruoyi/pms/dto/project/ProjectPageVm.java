@@ -1,10 +1,7 @@
 package com.ruoyi.pms.dto.project;
 
- 
-import io.swagger.models.auth.In;
 
 import java.util.Date;
-import java.util.List;
 
 public class ProjectPageVm {
 
@@ -137,5 +134,23 @@ public class ProjectPageVm {
 
     public void setProgress(Integer progress) {
         this.progress = progress;
+    }
+
+
+    @Override
+    public String toString() {
+        return "ProjectPageVm{" +
+                "id='" + id + '\'' +
+                ", projectName='" + projectName + '\'' +
+                ", description='" + description + '\'' +
+                ", userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", projectStatus='" + projectStatus + '\'' +
+                ", taskCount='" + taskCount + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", projectManagers='" + projectManagers + '\'' +
+                ", progress=" + progress +
+                '}';
     }
 }

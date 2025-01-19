@@ -10,7 +10,7 @@
           </gantt-header>
         </gantt-elastic>
       </el-tab-pane>
-      <el-tab-pane style=";width: 100%;" label="项目概览" name="second">
+      <el-tab-pane style="width: 100%;" label="项目概览" name="second">
 
         <el-card class="box-card">
           <div slot="header" class="clearfix">

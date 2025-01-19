@@ -42,6 +42,7 @@ public class ProjectServiceImp implements ProjectService {
     @Override
     public ResponsePaged<ProjectPageVm> page(ProjectPageDm dm) {
         Long userId = SecurityUtils.getUserId();
+        System.out.println("注册的用户ID为: " + userId);
         IPage<ProjectPageVm> classInfoIPage = this.projectMapper.pageProject(new Page<>(dm.getPageNum(), dm.getPageSize()), dm, userId);
         ResponsePaged<ProjectPageVm> page = new ResponsePaged<>();
         page.setPageCount(classInfoIPage.getPages());
@@ -216,14 +217,26 @@ public class ProjectServiceImp implements ProjectService {
     @Override
     public WorkStationCountVm getWorkStationCount() {
         WorkStationCountVm workStationCountVm = new WorkStationCountVm();
+        // 获取当前用户ID
         Long userId = SecurityUtils.getUserId();
-
+        // 获取当前用户参加过的所有项目: 项目为 已发布状态 project_status = '1'
         workStationCountVm.setProjectsParticipated(projectMapper.countProject(userId, "1"));
+        // 获取当前用户已完成的项目数量: 项目为 已归档状态 is_archived = '1'
         workStationCountVm.setProjectsCompleted(projectMapper.countProject(userId, "2"));
+        // 获取当前用户未完成的项目数量: 项目为 未归档状态 is_archived != '1'
         workStationCountVm.setProjectsPending(projectMapper.countProject(userId, "3"));
 
+        // 获取当前用户参加的已经完成的项目任务: 项目为 已发布状态 project_status = '1';
+        //                            项目为 未删除状态 is_deleted != '1'
+        //                            项目的进度为 100, progress = 100
         workStationCountVm.setTasksCompleted(taskMapper.countTask(userId, "1"));
+        // 获取当前用户参加的待办项目任务: 项目为 已发布状态 project_status = '1';
+        //                            项目为 未删除状态 is_deleted != '1'
+        //                            项目为 未归档状态 is_archived != '1'; 任务进度小于100 progress < 100
         workStationCountVm.setTasksPending(taskMapper.countTask(userId, "2"));
+        // 获取当前用户参加的逾期项目任务: 项目为 已发布状态 project_status = '1';
+        //                            项目为 未删除状态 is_deleted != '1'
+        //                            项目为 未归档状态 is_archived != '1'; 任务进度小于100 progress < 100; 任务结束日期小于当前日期
         workStationCountVm.setTasksOverdue(taskMapper.countTask(userId, "3"));
 
         return workStationCountVm;

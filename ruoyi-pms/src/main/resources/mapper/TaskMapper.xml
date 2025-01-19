@@ -87,17 +87,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         count(DISTINCT t1.id)
         from pms_project_task t1
         left join pms_project t2 on t1.project_id = t2.id
+        /*
+        在项目分配中, 指派了该用户
+        */
         where t1.assign_user_id = #{userId}
+        /*
+        任务的ID不在项目任务表的 p_id 列表中, 也就是说在这个列表中的都是项目ID, 不在的就是任务ID
+        */
         and t1.id not in (select p_id from pms_project_task where p_id is not null)
+        /*
+        项目为 未删除状态
+        */
         and t2.is_deleted != '1'
+        /*
+        项目为 已发布状态
+        */
         and t2.project_status = '1'
+        /*
+        项目进度为100
+        */
         <if test='type =="1"'>
             and t1.progress = 100
         </if>
+
+        /*
+        项目为 未归档状态; 任务进度小于100
+        */
         <if test='type =="2"'>
             and t2.is_archived !='1'
             and t1.progress <![CDATA[ < ]]> 100
         </if>
+
+        /*
+        项目为 未归档状态; 任务进度小于100; 任务结束日期小于当前日期
+        */
         <if test='type =="3"'>
             and t2.is_archived !='1'
             and t1.progress <![CDATA[ < ]]> 100

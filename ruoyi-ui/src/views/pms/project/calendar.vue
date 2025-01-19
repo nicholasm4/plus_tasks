@@ -327,45 +327,46 @@ import {
   deleteWorkDate,
   deleteWorkTime
 } from "@/api/pms/project/calendar";
-import moment from "moment/moment";
+// import moment from "moment/moment";
 
-
+// 此文件定义了一个日历组件，
+// 用于展示项目的日历视图，并允许用户管理与工作周、工作时间、例外日期和工作日期相关的设置。
 export default {
-  name: "Data",
-  props: {
+  name: "Data",  //组件名称
+  props: {      //接收父组件传入的属性
     // 定义一个名为id的prop，类型为String
     projectId: {
       type: String,
       default: ''
     }
   },
-  data() {
+  data() {  //定义组件内部的数据
     return {
-      activeName: 'first',
+      activeName: 'first',  // 当前激活的选项卡
       // 遮罩层
-      loading: true,
+      loading: true,  // 加载状态标志
       // 选中数组
-      ids: [],
+      ids: [],  // 选中项ID数组
       // 非单个禁用
-      single: true,
+      single: true,   // 单个禁用标志
       // 非多个禁用
-      multiple: true,
+      multiple: true,  // 多个禁用标志
       // 显示搜索条件
-      showSearch: false,
+      showSearch: false,   // 搜索框显示标志
       // 总条数
-      total: 0,
+      total: 0,  // 数据总数
       // list数据格式
-      dataList: [],
-      workWeekList: [],
-      workTimeList: [],
-      exceptionDateList: [],
-      workDateList: [],
+      dataList: [],   // 列表数据格式
+      workWeekList: [],   // 工作周列表
+      workTimeList: [],   // 工作时间列表
+      exceptionDateList: [],   // 例外日期列表
+      workDateList: [],   // 工作日期列表
       // 弹出层标题
-      title: "",
+      title: "",   // 弹出层标题
       // 是否显示弹出层
-      open: false,
+      open: false,  // 是否显示弹出层标志
       // 数据标签回显样式
-      listClassOptions: [
+      listClassOptions: [  // 数据标签回显样式选项
         {
           value: "default",
           label: "默认"
@@ -398,6 +399,7 @@ export default {
         taskName: undefined,
         projectId: undefined
       },
+      // 日期选择器快捷选项
       pickerOptions: {
         shortcuts: [{
           text: '今天',
@@ -433,6 +435,7 @@ export default {
       // 表单校验
     };
   },
+  // 实例创建完成后调用
   created() {
     this.queryParams.calendarId = this.projectId;
     this.getWorkWeekList();
@@ -443,6 +446,7 @@ export default {
 
   },
   methods: {
+    // 获取日期样式
     getDateStyle(date) {
 
       let m = (1000 * 60 * 60 * 24);
@@ -498,6 +502,7 @@ export default {
       return weekStyle + " " + dateStyle;
 
     },
+    // 选项卡点击事件处理函数
     onTabClick(s) {
       if (s.name === 'first') {
         this.getWorkWeekList();
@@ -510,7 +515,7 @@ export default {
       }
       this.ids = [];
     },
-    //获取工作日列表
+    //获取工作周列表
     getWorkWeekList() {
       this.loading = true;
       getWorkWeeklist(this.queryParams.calendarId).then(response => {
@@ -518,6 +523,7 @@ export default {
         this.loading = false;
       });
     },
+    // 获取工作日期列表
     getWorkDateList() {
       this.loading = true;
       getWorkDatelist(this.queryParams.calendarId).then(response => {
@@ -525,6 +531,7 @@ export default {
         this.loading = false;
       });
     },
+    // 获取工作时间列表
     getWorkTimeList() {
       this.loading = true;
       getWorkTimelist(this.queryParams.calendarId).then(response => {
@@ -532,6 +539,7 @@ export default {
         this.loading = false;
       });
     },
+    // 获取例外日期列表
     getExceptionDateList() {
       this.loading = true;
       getExceptionDatelist(this.queryParams.calendarId).then(response => {
@@ -539,21 +547,25 @@ export default {
         this.loading = false;
       });
     },
+    // 保存工作周设置
     saveWorkWeek(row) {
       saveWorkWeek(row).then(response => {
         //this.getWorkWeekList();
       });
     },
+    // 保存工作日期设置
     saveWorkDate(row) {
       saveWorkDate(row).then(response => {
         this.getWorkDateList();
       });
     },
+    // 保存工作时间设置
     saveWorkTime(row) {
       saveWorkTime(row).then(response => {
         this.getWorkTimeList();
       });
     },
+    // 保存例外日期设置
     saveExceptionDate(row) {
       saveExceptionDate(row).then(response => {
         this.getExceptionDatelist();
@@ -573,35 +585,32 @@ export default {
       };
       this.resetForm("form");
     },
-    /** 搜索按钮操作 */
+    // 搜索按钮操作
     handleQuery() {
       this.queryParams.pageNum = 1;
       this.getList();
     },
-    /** 返回按钮操作 */
+    // 返回按钮操作
     handleClose() {
       const obj = {path: "/pms/project"};
       this.$tab.closeOpenPage(obj);
     },
-    /** 重置按钮操作 */
+    // 重置按钮操作
     resetQuery() {
       this.resetForm("queryForm");
       // this.queryParams.projectId = this.queryParams.projectId;
       this.handleQuery();
     },
 
-    /** 新增按钮操作 */
+    // 新增工作日期
     handleAddWorkDate() {
       this.reset();
       this.form.calendarId = this.queryParams.calendarId;
-
-
-
       saveWorkDate(this.form).then(response => {
         this.getWorkDateList();
       });
     },
-
+    // 新增工作时间
     handleAddWorkTime() {
       this.reset();
       this.form.calendarId = this.queryParams.calendarId;
@@ -612,7 +621,7 @@ export default {
       });
     },
 
-
+    // 新增例外日期
     handleAddExceptionDate(row) {
       this.reset();
       this.form.calendarId = this.queryParams.calendarId;
@@ -622,14 +631,14 @@ export default {
     },
 
 
-    // 多选框选中数据
+    // 选择项变化时触发
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
 
-    /** 删除按钮操作 */
+    // 删除工作日期
     handleDeleteWorkDate(row) {
       let list = row.id || this.ids;
       this.$modal.confirm('是否确认删除工作日期').then(function () {
@@ -640,6 +649,7 @@ export default {
       }).catch(() => {
       });
     },
+    // 删除工作时间
     handleDeleteWorkTime(row) {
       let list = row.id || this.ids;
       this.$modal.confirm('是否确认删除工作时间').then(function () {
@@ -651,6 +661,7 @@ export default {
       });
     },
 
+    // 删除例外日期
     handleDeleteExpeptionDate(row) {
       let list = row.id || this.ids;
       this.$modal.confirm('是否确认删除例外日期').then(function () {
@@ -662,7 +673,9 @@ export default {
       });
     },
   },
+  // 监听器集合
   watch: {},
+  // 自定义过滤器
   filters: {
     formatDate(value) {
       const date = new Date(value);
